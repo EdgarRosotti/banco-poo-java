@@ -1,23 +1,24 @@
 # Sistema Bancário em Java (POO)
 
-Projeto de estudo em Java usando Programação Orientada a Objetos.
+Projeto de estudo em Java utilizando Programação Orientada a Objetos.
 
 ## Funcionalidades
 
 - Login por nome do titular
 - Consulta de saldo
-- Consulta de cheque especial
-- Solicitação de cheque especial com controle de limite
+- Consulta de cheque especial (limite total, usado e disponível)
+- Solicitação de cheque especial com validação de limite
 - Pagamento de boletos usando saldo e cheque especial
+- Menu em modo texto no terminal
 
-## Tecnologias
+## Estrutura do projeto
 
-- Java (console)
-- Git e GitHub
-
-## Como executar
-
-1. Compile os arquivos `.java`:
-
-   ```bash
-   javac Main.java Conta.java
+```text
+POO
+ ├─ src
+ │   └─ banco
+ │       ├─ Main.java
+ │       └─ Conta.java
+ ├─ bin
+ ├─ .gitignore
+ └─ README.md
