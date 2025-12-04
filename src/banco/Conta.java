@@ -19,6 +19,50 @@ public class Conta {
     public double consultarChequeEspecialDisponivel() {
         return especial - vespecial;
     }
+    // Depositar dinheiro (não usa cheque especial, só soma no saldo)
+    public boolean depositar(double valor) {
+        if (valor <= 0) {
+            return false;
+        }
+        this.saldo += valor;
+
+        // Se estava usando cheque especial (saldo negativo), o depósito
+        // poderia primeiro cobrir o "rombo", mas como sua lógica hoje
+        // controla isso em vespecial, vamos manter simples: só soma no saldo.
+        return true;
+    }
+
+    // Sacar dinheiro (permitindo usar cheque especial)
+    public boolean sacar(double valor) {
+        if (valor <= 0) {
+            return false;
+        }
+
+        double disponivelCheque = consultarChequeEspecialDisponivel();
+        double totalDisponivel = saldo + disponivelCheque;
+
+        if (valor > totalDisponivel) {
+            return false; // nem com cheque especial dá pra sacar
+        }
+
+        if (valor <= saldo) {
+            // saca só do saldo
+            saldo -= valor;
+        } else {
+            // usa todo saldo e o resto vem do cheque especial
+            double restante = valor - saldo;
+            saldo = 0;
+            vespecial += restante;
+        }
+
+        return true;
+    }
+
+    // Verificar se está usando cheque especial
+    public boolean estaUsandoChequeEspecial() {
+        return vespecial > 0;
+    }
+
 
     // Tenta usar o cheque especial; se conseguir, retorna true
     public boolean solicitarChequeEspecial(double valor) {

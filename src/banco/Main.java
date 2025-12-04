@@ -89,136 +89,160 @@ public class Main {
     }
     // Menu da conta
     public static void menuConta(Conta conta, Scanner scanner) {
-        while (true) {
-            limparTela();
+    while (true) {
+        limparTela();
 
-            System.out.println("===== CONTA CORRENTE =====");
-            System.out.println("Titular: " + conta.getTitular());
-            System.out.printf("Saldo atual: R$ %.2f%n", conta.getSaldo());
-            System.out.println();
-            System.out.println("1 - Consultar cheque especial");
-            System.out.println("2 - Solicitar cheque especial");
-            System.out.println("3 - Pagar boleto");
-            System.out.println("4 - Sair");
-            System.out.print("Escolha uma opção: ");
+        System.out.println("===== CONTA CORRENTE =====");
+        System.out.println("Titular: " + conta.getTitular());
+        System.out.printf("Saldo atual: R$ %.2f%n", conta.getSaldo());
+        System.out.println();
+        System.out.println("1 - Depositar");
+        System.out.println("2 - Sacar");
+        System.out.println("3 - Consultar cheque especial");
+        System.out.println("4 - Solicitar cheque especial");
+        System.out.println("5 - Pagar boleto");
+        System.out.println("6 - Verificar se está usando cheque especial");
+        System.out.println("7 - Sair");
+        System.out.print("Escolha uma opção: ");
 
-            int opcao = scanner.nextInt();
+        int opcao = scanner.nextInt();
 
-            switch (opcao) {
-                case 1:
-                    // CONSULTAR CHEQUE ESPECIAL
+        switch (opcao) {
+            case 1: { // DEPOSITAR
+                limparTela();
+                System.out.println("=== Depósito ===");
+                System.out.print("Informe o valor para depósito: ");
+                double valorDeposito = scanner.nextDouble();
+
+                if (conta.depositar(valorDeposito)) {
+                    System.out.println("\nDepósito realizado com sucesso!");
+                } else {
+                    System.out.println("\nValor inválido para depósito.");
+                }
+                pausar(scanner);
+                break;
+                }
+
+            case 2: { // SACAR
+                limparTela();
+                System.out.println("=== Saque ===");
+                System.out.printf("Saldo atual: R$ %.2f%n", conta.getSaldo());
+                System.out.printf("Cheque especial disponível: R$ %.2f%n",
+                        conta.consultarChequeEspecialDisponivel());
+                System.out.print("\nInforme o valor para saque: ");
+                double valorSaque = scanner.nextDouble();
+
+                if (conta.sacar(valorSaque)) {
+                    System.out.println("\nSaque realizado com sucesso.");
+                    if (conta.estaUsandoChequeEspecial()) {
+                        System.out.println("Atenção: você está usando cheque especial!");
+                    }
+                } else {
+                    System.out.println("\nNão foi possível realizar o saque (valor inválido ou saldo insuficiente).");
+                }
+                pausar(scanner);
+                break;
+                }
+
+            case 3: { // CONSULTAR CHEQUE ESPECIAL
+                limparTela();
+                double limiteTotal = conta.getEspecial();
+                double usado = conta.getVespecial();
+                double disponivel = conta.consultarChequeEspecialDisponivel();
+
+                System.out.println("=== Cheque Especial ===");
+                System.out.printf("Limite total:      R$ %.2f%n", limiteTotal);
+                System.out.printf("Já utilizado:      R$ %.2f%n", usado);
+                System.out.printf("Limite disponível: R$ %.2f%n", disponivel);
+                pausar(scanner);
+                break;
+                }
+
+            case 4: { // SOLICITAR CHEQUE ESPECIAL
+                limparTela();
+
+                double disponivelCheque = conta.consultarChequeEspecialDisponivel();
+                if (disponivelCheque <= 0) {
+                    System.out.println("Você não possui limite de cheque especial disponível.");
+                    pausar(scanner);
+                    break;
+                }
+
+                double valorCheque;
+                boolean sucesso;
+
+                do {
                     limparTela();
-                    double limiteTotal = conta.getEspecial();   // limite total configurado
-                    double usado = conta.getVespecial();        // quanto já usou
-                    double disponivel = limiteTotal - usado;    // quanto ainda pode usar
+                    System.out.println("=== Solicitar Cheque Especial ===");
+                    System.out.printf("Limite total:      R$ %.2f%n", conta.getEspecial());
+                    System.out.printf("Já utilizado:      R$ %.2f%n", conta.getVespecial());
+                    System.out.printf("Disponível:        R$ %.2f%n%n", conta.consultarChequeEspecialDisponivel());
 
-                    System.out.println("=== Cheque Especial ===");
-                    System.out.printf("Limite total:     R$ %.2f%n", limiteTotal);
-                    System.out.printf("Já utilizado:     R$ %.2f%n", usado);
-                    System.out.printf("Limite disponível:R$ %.2f%n", disponivel);
-                    pausar(scanner);
-                    break;
+                    System.out.print("Informe o valor de cheque especial que deseja usar: ");
+                    valorCheque = scanner.nextDouble();
 
-                case 2:
-                    // SOLICITAR CHEQUE ESPECIAL
-                    limparTela();
+                    sucesso = conta.solicitarChequeEspecial(valorCheque);
 
-                    limiteTotal = conta.getEspecial();
-                    usado = conta.getVespecial();
-                    disponivel = limiteTotal - usado;
-
-                    if (disponivel <= 0) {
-                        System.out.println("Você não possui limite de cheque especial disponível.");
+                    if (!sucesso) {
+                        System.out.println("\nOpção inválida. Limite do cheque especial excedido ou valor inválido.");
+                        System.out.println("Tente novamente.");
                         pausar(scanner);
-                        break;
                     }
+                } while (!sucesso);
 
-                    double valorCheque;
+                System.out.println("\nCheque especial liberado e adicionado ao saldo.");
+                pausar(scanner);
+                break;
+                }
 
-                    do {
-                        limparTela();
-                        System.out.println("=== Solicitar Cheque Especial ===");
-                        System.out.printf("Limite total:     R$ %.2f%n", limiteTotal);
-                        System.out.printf("Já utilizado:     R$ %.2f%n", usado);
-                        System.out.printf("Disponível:       R$ %.2f%n%n", disponivel);
+            case 5: { // PAGAR BOLETO
+                limparTela();
+                System.out.println("=== Pagar Boleto ===");
+                System.out.printf("Saldo atual: R$ %.2f%n", conta.getSaldo());
+                System.out.printf("Limite de cheque especial disponível: R$ %.2f%n%n",
+                        conta.consultarChequeEspecialDisponivel());
 
-                        System.out.print("Informe o valor de cheque especial que deseja usar: ");
-                        valorCheque = scanner.nextDouble();
+                System.out.print("Informe o valor do boleto: ");
+                double valorBoleto = scanner.nextDouble();
 
-                        if (valorCheque > disponivel) {
-                            System.out.println("\nOpção inválida. Limite do cheque especial excedido.");
-                            System.out.println("Tente novamente.");
-                            pausar(scanner);
-                        }
+                boolean pago = conta.pagarBoleto(valorBoleto);
 
-                    } while (valorCheque > disponivel);
-
-                    // valor válido, atualiza saldo e usado
-                    conta.setSaldo(conta.getSaldo() + valorCheque);
-                    conta.setVespecial(conta.getVespecial() + valorCheque);
-
-                    System.out.println("\nCheque especial liberado e adicionado ao saldo.");
+                if (!pago) {
+                    System.out.println("\nNão foi possível pagar o boleto (valor inválido ou saldo insuficiente).");
                     pausar(scanner);
                     break;
+                }
 
-                case 3:
-                    // PAGAR BOLETO
-                    limparTela();
-                    System.out.println("=== Pagar Boleto ===");
-                    System.out.printf("Saldo atual: R$ %.2f%n", conta.getSaldo());
+                System.out.println("\nBoleto pago com sucesso.");
+                if (conta.estaUsandoChequeEspecial()) {
+                    System.out.println("Atenção: você está usando cheque especial!");
+                }
+                pausar(scanner);
+                break;
+                }
 
-                    limiteTotal = conta.getEspecial();
-                    usado = conta.getVespecial();
-                    disponivel = limiteTotal - usado;
+            case 6: { // VERIFICAR SE ESTÁ USANDO CHEQUE ESPECIAL
+                limparTela();
+                if (conta.estaUsandoChequeEspecial()) {
+                    System.out.println("Você está usando cheque especial no momento.");
+                } else {
+                    System.out.println("Você NÃO está usando cheque especial.");
+                }
+                pausar(scanner);
+                break;
+                }
 
-                    System.out.printf("Limite de cheque especial disponível: R$ %.2f%n%n", disponivel);
+            case 7:
+                return;
 
-                    System.out.print("Informe o valor do boleto: ");
-                    double valorBoleto = scanner.nextDouble();
-
-                    if (valorBoleto <= 0) {
-                        System.out.println("Valor inválido para boleto.");
-                        pausar(scanner);
-                        break;
-                    }
-
-                    double saldoAtual = conta.getSaldo();
-                    double totalDisponivel = saldoAtual + disponivel;
-
-                    if (valorBoleto > totalDisponivel) {
-                        System.out.println("\nSaldo insuficiente (mesmo com cheque especial).");
-                        pausar(scanner);
-                        break;
-                    }
-
-                    // Primeiro usa o saldo normal
-                    if (valorBoleto <= saldoAtual) {
-                        conta.setSaldo(saldoAtual - valorBoleto);
-                    } else {
-                        // Usa todo saldo e o restante vem do cheque especial
-                        double restante = valorBoleto - saldoAtual;
-                        conta.setSaldo(0);
-                        conta.setVespecial(conta.getVespecial() + restante);
-                    }
-
-                    System.out.println("\nBoleto pago com sucesso.");
-                    if (conta.getVespecial() > 0) {
-                        System.out.println("Atenção: você está usando o cheque especial!");
-                    }
-                    pausar(scanner);
-                    break;
-
-                case 4:
-                    // SAIR DO MENU DA CONTA
-                    return;
-
-                default:
-                    System.out.println("Opção inválida.");
-                    pausar(scanner);
-                    break;
+            default:
+                System.out.println("Opção inválida.");
+                pausar(scanner);
+                break;
             }
         }
     }
+
 
 
     // Método para pausar e esperar o usuário pressionar ENTER
