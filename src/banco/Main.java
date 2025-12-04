@@ -121,7 +121,7 @@ public class Main {
                 }
                 pausar(scanner);
                 break;
-                }
+            }
 
             case 2: { // SACAR
                 limparTela();
@@ -142,7 +142,7 @@ public class Main {
                 }
                 pausar(scanner);
                 break;
-                }
+            }
 
             case 3: { // CONSULTAR CHEQUE ESPECIAL
                 limparTela();
@@ -156,7 +156,7 @@ public class Main {
                 System.out.printf("Limite disponível: R$ %.2f%n", disponivel);
                 pausar(scanner);
                 break;
-                }
+            }
 
             case 4: { // SOLICITAR CHEQUE ESPECIAL
                 limparTela();
@@ -166,7 +166,7 @@ public class Main {
                     System.out.println("Você não possui limite de cheque especial disponível.");
                     pausar(scanner);
                     break;
-                }
+            }
 
                 double valorCheque;
                 boolean sucesso;
@@ -193,7 +193,7 @@ public class Main {
                 System.out.println("\nCheque especial liberado e adicionado ao saldo.");
                 pausar(scanner);
                 break;
-                }
+            }
 
             case 5: { // PAGAR BOLETO
                 limparTela();
@@ -219,7 +219,7 @@ public class Main {
                 }
                 pausar(scanner);
                 break;
-                }
+            }
 
             case 6: { // VERIFICAR SE ESTÁ USANDO CHEQUE ESPECIAL
                 limparTela();
@@ -230,7 +230,7 @@ public class Main {
                 }
                 pausar(scanner);
                 break;
-                }
+            }
 
             case 7:
                 return;
@@ -239,9 +239,9 @@ public class Main {
                 System.out.println("Opção inválida.");
                 pausar(scanner);
                 break;
-            }
         }
     }
+}
 
 
 
