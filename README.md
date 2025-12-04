@@ -1,18 +1,23 @@
-## Getting Started
+# Sistema Bancário em Java (POO)
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+Projeto de estudo em Java usando Programação Orientada a Objetos.
 
-## Folder Structure
+## Funcionalidades
 
-The workspace contains two folders by default, where:
+- Login por nome do titular
+- Consulta de saldo
+- Consulta de cheque especial
+- Solicitação de cheque especial com controle de limite
+- Pagamento de boletos usando saldo e cheque especial
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+## Tecnologias
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+- Java (console)
+- Git e GitHub
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+## Como executar
 
-## Dependency Management
+1. Compile os arquivos `.java`:
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+   ```bash
+   javac Main.java Conta.java
