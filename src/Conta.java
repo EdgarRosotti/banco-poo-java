@@ -2,9 +2,6 @@ public class Conta {
     private String titular;
     private double saldo;
     private double especial; //cheque especial
-    private double depositar;
-    private double sacar;
-    private double boleto;
     private double vespecial; //Verificar cheque especial
 
 
@@ -16,6 +13,49 @@ public class Conta {
         this.especial = especial;
     }
 
+    // Quanto ainda tenho de cheque especial disponível
+    public double consultarChequeEspecialDisponivel() {
+        return especial - vespecial;
+    }
+
+    // Tenta usar o cheque especial; se conseguir, retorna true
+    public boolean solicitarChequeEspecial(double valor) {
+        double disponivel = consultarChequeEspecialDisponivel();
+
+        if (valor <= 0 || valor > disponivel) {
+            return false; // inválido ou passou do limite
+        }
+
+        saldo += valor;      // entra dinheiro na conta
+        vespecial += valor;  // registra que usou esse valor do limite
+        return true;
+    }
+
+    // Pagar boleto usando saldo + cheque especial
+    public boolean pagarBoleto(double valor) {
+        if (valor <= 0) {
+            return false;
+        }
+
+        double disponivelCheque = consultarChequeEspecialDisponivel();
+        double totalDisponivel = saldo + disponivelCheque;
+
+        if (valor > totalDisponivel) {
+            return false; // nem com cheque especial dá
+        }
+
+        if (valor <= saldo) {
+            // paga só com saldo
+            saldo -= valor;
+        } else {
+            // usa todo saldo e o resto vem do cheque especial
+            double restante = valor - saldo;
+            saldo = 0;
+            vespecial += restante;
+        }
+
+        return true;
+    }
 
 
 
@@ -37,24 +77,6 @@ public class Conta {
     }
     public void setEspecial(double especial) {
         this.especial = especial;
-    }
-    public double getDepositar() {
-        return depositar;
-    }
-    public void setDepositar(double depositar) {
-        this.depositar = depositar;
-    }
-    public double getSacar() {
-        return sacar;
-    }
-    public void setSacar(double sacar) {
-        this.sacar = sacar;
-    }
-    public double getBoleto() {
-        return boleto;
-    }
-    public void setBoleto(double boleto) {
-        this.boleto = boleto;
     }
     public double getVespecial() {
         return vespecial;
