@@ -1,22 +1,42 @@
 package banco;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
         
 
     public static void main(String[] args) throws Exception {
-        // Contas prontas
-        Conta conta1 = new Conta("João", 1000.0, 500.0);
-        Conta conta2 = new Conta("Maria", 2500.0, 1000.0);
-        Conta conta3 = new Conta("Edgar", 500.0, 200.0);
-        // Guardando as contas em um array
-        Conta[] contas = { conta1, conta2, conta3 };
+        // Lista para armazenar as contas
+        List<Conta> contas = new ArrayList<>();
+
+        // Contas prontas iniciais
+        contas.add(new Conta("João", 1000.0, 500.0));
+        contas.add(new Conta("Maria", 2500.0, 1000.0));
+        contas.add(new Conta("Edgar", 500.0, 200.0));
         while (true) { 
             System.out.println("Deseja Abrir uma Conta Corrente?(1)\n" + "Deseja Logar em sua Conta?(2)\n" + "Sair?(3)\n");
             Scanner scanner = new Scanner(System.in);
             int opcao = scanner.nextInt();
             if (opcao == 1) {
-                System.out.println("Funcionalidade de abertura de conta ainda não implementada.\n");
+                limparTela();
+                System.out.println("=== Abertura de Conta ===");
+
+                System.out.print("Digite o nome do titular da conta: ");
+                String nomeTitular = scanner.next(); // por enquanto só 1 palavra
+
+                System.out.print("Digite o saldo inicial: ");
+                double saldoInicial = scanner.nextDouble();
+
+                System.out.print("Digite o limite de cheque especial: ");
+                double limiteEspecial = scanner.nextDouble();
+
+                Conta novaConta = new Conta(nomeTitular, saldoInicial, limiteEspecial);
+                contas.add(novaConta);
+
+                System.out.println("\nConta criada com sucesso para " + nomeTitular + "!");
+                pausar(scanner);
             } 
             else if (opcao == 2) {
                 System.out.println("Digite o nome do titular da conta:");
@@ -58,6 +78,15 @@ public class Main {
         }
     }
 
+    // Método para buscar conta por nome em uma lista
+    public static Conta buscarContaPorNome(List<Conta> contas, String nomeDigitado) {
+        for (Conta conta : contas) {
+            if (conta.getTitular().equalsIgnoreCase(nomeDigitado)) {
+                return conta;
+            }
+        }
+        return null;
+    }
     // Menu da conta
     public static void menuConta(Conta conta, Scanner scanner) {
         while (true) {

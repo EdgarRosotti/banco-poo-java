@@ -12,6 +12,7 @@ public class Conta {
         this.titular = titular;
         this.saldo = saldo;
         this.especial = especial;
+        this.vespecial = 0;
     }
 
     // Quanto ainda tenho de cheque especial disponível
