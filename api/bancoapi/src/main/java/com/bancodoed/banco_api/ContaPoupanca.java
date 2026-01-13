@@ -1,4 +1,4 @@
-package banco;
+package com.bancodoed.banco_api;
 
 public class ContaPoupanca extends Conta {
 

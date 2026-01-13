@@ -1,4 +1,4 @@
-package banco;
+package com.bancodoed.banco_api;
 
 public abstract class Conta {
     private String titular;
